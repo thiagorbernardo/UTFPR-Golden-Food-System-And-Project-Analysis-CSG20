@@ -1,4 +1,4 @@
-enum OrderStatus {
+export enum OrderStatus {
     created = 'CREATED',
     enRoute = 'EN_ROUTE',
     delivered = 'DELIVERED',
