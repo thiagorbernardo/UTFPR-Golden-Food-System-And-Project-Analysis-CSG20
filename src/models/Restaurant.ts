@@ -1,25 +1,35 @@
-class Restaurant {
-    private _id: string;
-    private name: string;
-    private city: string;
-    private employees: string[];
+import mongoose, { Schema } from "mongoose";
+import { v4 as uuid } from 'uuid';
+import { Collections } from "../enum";
 
-    constructor(name: string, city: string) {
-        this._id = Math.random().toString();
-        this.name = name;
-        this.city = city;
-    }
+export interface IRestaurant {
+  readonly _id: string;
+  readonly name: string;
+  readonly city: string;
 }
 
+export class Restaurant {
+  readonly _id: string;
+  readonly name!: string;
+  readonly city!: string;
 
-/*
-    Um sistema administrativo de uma rede de restaurantes
-    O operário do sistema pode:
-        - Ver todas as lojas da rede,
-        - Ver os pedidos do restaurante
-        - Atualizar o status de um pedido no restaurante
-        - Ver o cardápio com somente os ingredientes disponiveis
-        - Adicionar / Remover receitas de comidas
-        - Adicionar / Remover ingredientes
-        - Ver / atualizar informações dos funcionários (horas de trabalho)
-*/
+  constructor({ _id, name, city }: Partial<IRestaurant>) {
+    if (!_id) this._id = uuid(); else this._id = _id;
+    if(name) this.name = name
+    if(city) this.city = city
+  }
+
+  public toObject(): IRestaurant {
+    return {...this};
+  }
+}
+
+const RestaurantSchema: Schema = new Schema({
+  _id: { type: String, required: true },
+  name: { type: String, required: true },
+  city: { type: Date, required: true },
+}, {
+  timestamps: true
+});
+
+export const RestaurantModel = mongoose.models.RestaurantModel || mongoose.model('RestaurantModel', RestaurantSchema, Collections.restaurants);

@@ -1,46 +1,52 @@
-// export class Menu {
-//   private _id: string;
-//   private restaurantId: string;
-//   private dessert: Food[];
-//   private drinks: Food[];
-//   private mainCourse: Food[];
-//   private general: Food[];
-//   private unavailableFoods: string[];
-// }
+import mongoose, { Schema } from "mongoose";
+import { v4 as uuid } from 'uuid';
+import { Collections } from "../enum";
 
-// import { v4 as uuid } from 'uuid';
+export interface IMenu {
+  readonly _id: string;
+  readonly restaurantId: string;
+  readonly dessert: string[];
+  readonly drinks: string[];
+  readonly mainCourse: string[];
+  readonly general: string[];
+  readonly unavailableFoods: string[];
+}
 
-// export interface IEmployee {
-//   readonly _id: string;
-//   readonly restaurantId: string;
-//   readonly name: string;
-//   readonly score: number;
-//   readonly workHours: number;
-// }
+export class Menu {
+  readonly _id: string;
+  readonly restaurantId!: string;
+  readonly dessert!: string[];
+  readonly drinks!: string[];
+  readonly mainCourse!: string[];
+  readonly general!: string[];
+  readonly unavailableFoods!: string[];
 
-// export class Employee {
-//   readonly _id: string;
-//   readonly restaurantId: string;
-//   readonly name: string;
-//   readonly score: number;
-//   readonly workHours: number;
+  constructor({ _id, restaurantId, dessert, drinks, mainCourse, general, unavailableFoods, }: Partial<IMenu>) {
+    if (!_id) this._id = uuid(); else this._id = _id;
+    if(restaurantId) this.restaurantId = restaurantId
+    if(dessert) this.dessert = dessert
+    if(drinks) this.drinks = drinks
+    if(mainCourse) this.mainCourse = mainCourse
+    if(general) this.general = general
+    if(unavailableFoods) this.unavailableFoods = unavailableFoods
+  }
 
-//   constructor({ restaurantId, name, score, workHours }: Omit<IEmployee, "_id">) {
-//     this._id = uuid();
-//     this.name = name;
-//     this.restaurantId = restaurantId;
-//     this.score = score;
-//     this.workHours = workHours;
-//   }
+  public toObject(): IMenu {
+    return {...this};
+  }
+}
 
-//   public toObject(): IEmployee {
-//     return {...this}
-//     return {
-//       _id: this._id,
-//       name: this.name,
-//       restaurantId: restaurantId,
-//       score: score,
-//       workHours: workHours
-//     };
-//   }
-// }
+const MenuSchema: Schema = new Schema({
+  _id: { type: String, required: true },
+  restaurantId: { type: String, required: true },
+  ingredients: { type: [String], required: true },
+  dessert: { type: [String], required: true },
+  drinks: { type: [String], required: true },
+  mainCourse: { type: [String], required: true },
+  general: { type: [String], required: true },
+  unavailableFoods: { type: [String], required: true },
+}, {
+  timestamps: true
+});
+
+export const MenuModel = mongoose.models.MenuModel || mongoose.model('MenuModel', MenuSchema, Collections.menu);

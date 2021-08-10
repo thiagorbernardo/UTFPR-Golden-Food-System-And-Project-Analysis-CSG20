@@ -1,7 +1,7 @@
 export enum Collections {
     foods = 'Foods',
     employees = 'Employees',
-    menu = 'Menu',
+    menu = 'Menus',
     orders = 'Orders',
     restaurants = 'Restaurants',
 }

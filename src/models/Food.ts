@@ -9,8 +9,8 @@ export interface IFood {
   readonly price: number;
 }
 
-export class Food implements IFood {
-  readonly _id!: string;
+export class Food {
+  readonly _id: string;
   readonly name!: string;
   readonly ingredients!: string[];
   readonly price!: number;
