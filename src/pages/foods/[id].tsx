@@ -11,7 +11,7 @@ type Props = {
 
 function Food({ food }: Props) {
   if (!food) {
-    return <ErrorPage statusCode={404} title={"Erro ao procurar food"} />;
+    return <ErrorPage statusCode={404} title={"Erro ao procurar receita"} />;
   }
 
   const totalOfIngredients = food.ingredients.length

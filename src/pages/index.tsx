@@ -30,6 +30,21 @@ export default function Home() {
             </div>
           </Link>
 
+
+          <Link href="/orders" passHref >
+          <div className={styles.card}>
+            <h2>Pedidos &rarr;</h2>
+            <p>Veja todos os pedidos de cada unidade da rede.</p>
+            </div>
+          </Link>
+
+          <Link href="/employees" passHref >
+          <div className={styles.card}>
+            <h2>Funcionários &rarr;</h2>
+            <p>Procure os funcionários da rede e de que unidade eles pertecem.</p>
+            </div>
+          </Link>
+
           <Link href="/foods" passHref >
           <div className={styles.card}>
             <h2>Receitas &rarr;</h2>
@@ -37,16 +52,7 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href="/employees" passHref >
-          <div className={styles.card}>
-            <h2>Funcionários &rarr;</h2>
-            <p>
-              Procure os funcionários da rede e de que unidade eles pertecem.
-            </p>
-            </div>
-          </Link>
-
-          <Link href="/menus" passHref >
+          {/* <Link href="/menus" passHref >
           <div className={styles.card}>
             <h2>Cardápios &rarr;</h2>
             <p>
@@ -54,17 +60,7 @@ export default function Home() {
               receitas disponíveis.
             </p>
             </div>
-          </Link>
-
-          <Link href="/orders" passHref >
-          <div className={styles.card}>
-            <h2>Pedidos &rarr;</h2>
-            <p>
-              Veja todos os pedidos concluídos em andamentos de cada unidade da
-              rede.
-            </p>
-            </div>
-          </Link>
+          </Link> */}
         </div>
       </main>
 

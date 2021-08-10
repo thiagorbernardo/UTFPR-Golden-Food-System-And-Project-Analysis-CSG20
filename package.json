@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:deploy": "npx lt --subdomain golden-food -p 3000 -o"
   },
   "dependencies": {
     "@types/mongoose": "^5.11.97",

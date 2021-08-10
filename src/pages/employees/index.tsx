@@ -2,27 +2,27 @@ import { GetServerSideProps } from "next"
 import Head from 'next/head'
 import ErrorPage from "next/error";
 
-import { IFood } from "../../models/Food"
+import { IEmployee } from "../../models";
 import styles from '../../styles/Foods.module.css'
-import Image from "next/image";
+import axios from "axios";
 
 type Props = {
-  foods: IFood[]
+  employees: IEmployee[]
 }
 
-function Blog({ foods }: Props) {
-  if (!foods.length) {
+function Blog({ employees }: Props) {
+  if (!employees.length) {
     return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
   }
 
   return (
     <main className={styles.main}>
       <Head>
-        <title>Receitas</title>
+        <title>Funcionários</title>
       </Head>
 
       {/* <div className={styles.grid}> */}
-      {foods.map((post) => (
+      {employees.map((post) => (
         card(post)
       ))}
       {/* </div> */}
@@ -31,12 +31,12 @@ function Blog({ foods }: Props) {
   )
 }
 
-const card = ({ _id, name, ingredients }: IFood) => {
+const card = ({ _id, name }: IEmployee) => {
   return (
     <a
       className={styles.card}
       key={_id}
-      href={`/foods/${_id}`}
+      href={`/employees/${_id}`}
     >
       <h2>{name}</h2>
       {/* <p>Ingredientes: {ingredients.join(', ')}</p> */}
@@ -46,20 +46,25 @@ const card = ({ _id, name, ingredients }: IFood) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
+  const { restaurantId } = context.query as any
 
-      const res = await fetch('http://localhost:3000/api/foods')
-      const foods: IFood[] = await res.json()
+  try {
+    const res = await axios.get(`http://localhost:3000/api/employees`, {
+      params: {
+        restaurantId
+      }
+    })
+      const employees: IEmployee[] = res.data
 
     return {
       props: {
-        foods,
+        employees,
       },
     }
   } catch (error) {
     return {
       props: {
-        foods: [],
+        employees: [],
       },
     }
   }

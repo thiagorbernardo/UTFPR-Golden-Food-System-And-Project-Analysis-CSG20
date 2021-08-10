@@ -27,6 +27,7 @@ export class EmployeeService {
 
   public async getEmployees(restaurantId?: string) {
     const filter = !restaurantId ? {} : { restaurantId }
+
     const employeeObjs = await this.repository.find(filter);
 
     return employeeObjs.map((f) => this.objectToEmployeeInstance(f))

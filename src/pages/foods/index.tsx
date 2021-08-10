@@ -5,6 +5,7 @@ import ErrorPage from "next/error";
 import { IFood } from "../../models/Food"
 import styles from '../../styles/Foods.module.css'
 import Image from "next/image";
+import axios from "axios";
 
 type Props = {
   foods: IFood[]
@@ -48,8 +49,8 @@ const card = ({ _id, name, ingredients }: IFood) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
 
-      const res = await fetch('http://localhost:3000/api/foods')
-      const foods: IFood[] = await res.json()
+      const res = await axios.get('http://localhost:3000/api/foods')
+      const foods: IFood[] = res.data
 
     return {
       props: {
