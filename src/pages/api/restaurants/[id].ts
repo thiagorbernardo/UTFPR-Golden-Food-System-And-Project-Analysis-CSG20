@@ -10,15 +10,19 @@ export default async function handler(
 
   await dbConnect();
 
-  const { id } = req.query
+  const { id, filter } = req.query
 
   try {
     const restaurantService = new RestaurantService();
-    const restaurant = await restaurantService.getRestaurantById(id as string);
 
+    const restaurant = await restaurantService.getRestaurantById(id as string);
     if (!restaurant) return res.status(400).end()
 
-    return res.status(200).json(restaurant.toObject());
+    const profit = await restaurantService.getProfit(id as string)
+    return res.status(200).json({restaurant: restaurant.toObject(), profit});
+
+
+
   } catch (err) {
     return res.status(500).end();
   }

@@ -12,10 +12,11 @@ import env from "../../config/Environment";
 import { BackButton } from "../../components/BackButton";
 
 type Props = {
-  restaurant: IRestaurant
+  restaurant: IRestaurant,
+  profit: number
 }
 
-function Food({ restaurant }: Props) {
+function Food({ restaurant, profit }: Props) {
   if (!restaurant) {
     return <ErrorPage statusCode={404} title={"Erro ao procurar restaurante"} />;
   }
@@ -44,27 +45,32 @@ function Food({ restaurant }: Props) {
           {restaurant.city}
         </p>
 
+        <p className={styles.description}>
+          Lucro diário atual: R${profit}
+        </p>
+
         <div className={styles.buttonGrid}>
-          <p className={styles.button} onClick={() =>  handleClickGoTo(`/restaurants/`)}>
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/orders/`)}>
             Pedidos
           </p>
 
-          <p className={styles.button} onClick={() =>  handleClickGoTo(`/restaurants/`)}>
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/employees/`)}>
             Funcionários
           </p>
 
-          <p className={styles.button} onClick={() =>  handleClickGoTo(`/restaurants/`)}>
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/menus/`)}>
             Cardápio
           </p>
         </div>
-
-        <p className={styles.button}>
-          Calcular lucro diário
-        </p>
       </main>
     </div>
 
   )
+}
+
+interface IResultRestaurant {
+  restaurant: IRestaurant,
+  profit: number
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -72,13 +78,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
 
   try {
-    const res = await axios.get(`${env.app.url}/api/restaurants/${id}`)
+    const res = await axios.get<IResultRestaurant>(`${env.app.url}/api/restaurants/${id}`)
 
-    const restaurant: IRestaurant = await res.data
+    const {restaurant, profit} = res.data
 
     return {
       props: {
         restaurant,
+        profit
       },
     }
   } catch (error) {
