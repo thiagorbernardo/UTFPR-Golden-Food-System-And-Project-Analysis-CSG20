@@ -3,7 +3,7 @@ import Head from 'next/head'
 import ErrorPage from "next/error";
 
 import { IFood } from "../../models/Food"
-import styles from '../../styles/Foods.module.css'
+import styles from '../../styles/BaseScreens.module.css'
 import Image from "next/image";
 import axios from "axios";
 

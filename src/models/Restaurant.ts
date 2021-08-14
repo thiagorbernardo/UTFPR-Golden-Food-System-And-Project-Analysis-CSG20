@@ -27,7 +27,7 @@ export class Restaurant {
 const RestaurantSchema: Schema = new Schema({
   _id: { type: String, required: true },
   name: { type: String, required: true },
-  city: { type: Date, required: true },
+  city: { type: String, required: true },
 }, {
   timestamps: true
 });

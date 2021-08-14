@@ -1,0 +1,14 @@
+.a {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  color: gold;
+}
+
+.a:hover,
+.a:focus,
+.a:active {
+  color: #0070f3;
+  border-color: #0070f3;
+  cursor: pointer;
+}

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import ErrorPage from "next/error";
 
 import { IEmployee } from "../../models";
-import styles from '../../styles/Foods.module.css'
+import styles from '../../styles/BaseScreens.module.css'
 import axios from "axios";
 
 type Props = {

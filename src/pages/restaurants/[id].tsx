@@ -1,35 +1,65 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
+import Head from "next/head";
+import { useCallback } from "react";
+import { useRouter } from 'next/router'
 
-import { IFood } from "../../models/Food"
+import { IRestaurant } from "../../models"
 import styles from '../../styles/Home.module.css'
+import env from "../../config/Environment";
+import { BackButton } from "../../components/BackButton";
 
 type Props = {
-  food: IFood
+  restaurant: IRestaurant
 }
 
-function Food({ food }: Props) {
-  if (!food) {
-    return <ErrorPage statusCode={404} title={"Erro ao procurar food"} />;
+function Food({ restaurant }: Props) {
+  if (!restaurant) {
+    return <ErrorPage statusCode={404} title={"Erro ao procurar restaurante"} />;
   }
 
-  const totalOfIngredients = food.ingredients.length
-  const getIngredients = () => food.ingredients.slice(0, totalOfIngredients - 1).join(', ') + ' e ' + food.ingredients[totalOfIngredients - 1]
+  const router = useRouter()
+
+  const handleClickGoTo = useCallback((route: string) => {
+    router.push(route)
+  }, [router])
+
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>{restaurant.name}</title>
+      </Head>
+
+      <BackButton />
+
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {food.name}
+          {restaurant.name}
         </h1>
 
         <p className={styles.description}>
-        Preço: {`R$ ${food.price}`}
+          {restaurant.city}
         </p>
 
-        <p className={styles.description}>
-        Ingredientes: {getIngredients()}
+        <div className={styles.buttonGrid}>
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/restaurants/`)}>
+            Pedidos
+          </p>
+
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/restaurants/`)}>
+            Funcionários
+          </p>
+
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/restaurants/`)}>
+            Cardápio
+          </p>
+        </div>
+
+        <p className={styles.button}>
+          Calcular lucro diário
         </p>
       </main>
     </div>
@@ -37,24 +67,24 @@ function Food({ food }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) =>  {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { id } = context.query
 
   try {
-    const res = await axios.get(`http://localhost:3000/api/foods/${id}`)
+    const res = await axios.get(`${env.app.url}/api/restaurants/${id}`)
 
-    const food: IFood = await res.data
+    const restaurant: IRestaurant = await res.data
 
-  return {
-    props: {
-      food,
-    },
-  }
+    return {
+      props: {
+        restaurant,
+      },
+    }
   } catch (error) {
     return {
       props: {
-        food: {},
+        restaurant: {},
       },
     }
   }

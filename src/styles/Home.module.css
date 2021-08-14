@@ -103,3 +103,28 @@
     flex-direction: column;
   }
 }
+
+.button {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background-color: inherit;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid #eaeaea;
+  align-content: center;
+  padding: 3px;
+  box-shadow: 0.5px 2px 0.5px;
+  margin-right: 10px;
+}
+
+.button:hover {
+  box-shadow: 3px 3px 3px rgb(253, 242, 180);
+}
+
+.buttonGrid {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
