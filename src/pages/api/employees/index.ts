@@ -11,14 +11,22 @@ export default async function handler(
 
   const { restaurantId } = req.query
 
-  try {
-    const employeesService = new EmployeeService();
-    const employees = await employeesService.getEmployees(restaurantId as string);
+  const employeesService = new EmployeeService();
+  switch (req.method) {
+    case 'GET':
+      try {
+        const employees = await employeesService.getEmployees(restaurantId as string);
 
-    const sortedEmployees = employeesService.sortEmployeesByName(employees)
+        const sortedEmployees = employeesService.sortEmployeesByName(employees)
 
-    return res.status(200).json(sortedEmployees);
-  } catch (err) {
-    return res.status(500).end();
+        return res.status(200).json(sortedEmployees);
+      } catch (err) {
+        return res.status(500).end();
+      }
+    case 'POST':
+      await employeesService.createEmployee('Yuiti', '27f224c6-160c-4221-a5aa-b29c7741cdc1', 10, 7)
+      res.end()
+    default:
+      break;
   }
 }
