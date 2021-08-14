@@ -2,16 +2,20 @@ import mongoose, { Schema } from "mongoose";
 import { v4 as uuid } from 'uuid';
 import { Collections } from "../enum";
 import { OrderStatus } from "../enum/OrderStatus";
-import { IFood } from "./Food";
 
 export interface IOrder {
   readonly _id: string;
   readonly restaurantId: string;
   readonly createdAt: Date;
   readonly status: OrderStatus;
-  readonly options: IFood[];
+  readonly options: ExcludeFood[];
   readonly cost: number;
   readonly shipping: number;
+}
+
+export interface ExcludeFood {
+  name: string;
+  price: number;
 }
 
 export class Order {
@@ -19,7 +23,7 @@ export class Order {
   readonly restaurantId!: string;
   readonly createdAt!: Date;
   public status!: OrderStatus;
-  readonly options!: IFood[];
+  readonly options!: ExcludeFood[];
   readonly cost!: number;
   readonly shipping!: number;
 
@@ -39,6 +43,10 @@ export class Order {
 
   public changeOrderStatus(status: OrderStatus) {
     this.status = status
+  }
+
+  public calculateCost() {
+    return this.cost + this.shipping
   }
 }
 

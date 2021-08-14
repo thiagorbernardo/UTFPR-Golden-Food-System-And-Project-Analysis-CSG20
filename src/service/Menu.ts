@@ -16,9 +16,8 @@ export class MenuService {
     await this.repository.create(menu.toObject());
   }
 
-  public async getMenuById(_id: string, restaurantId?: string) {
-    const filter = !restaurantId ? { _id } : { _id, restaurantId }
-    const menuObj = await this.repository.findOne(filter);
+  public async getMenuByRestaurantId(restaurantId: string) {
+    const menuObj = await this.repository.findOne({ restaurantId });
 
     if (!menuObj) return null
 

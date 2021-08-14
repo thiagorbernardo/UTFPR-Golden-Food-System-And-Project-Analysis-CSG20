@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Order, OrderModel, IOrder, IFood } from "../models";
+import { Order, OrderModel, IOrder, ExcludeFood } from "../models";
 import { BaseRepository } from "../repositories";
 
 
@@ -10,7 +10,7 @@ export class OrderService {
     return new Order(obj.toObject());
   }
 
-  public async createOrder(restaurantId: string, shipping: number, cost: number, options: IFood[]) {
+  public async createOrder(restaurantId: string, shipping: number, cost: number, options: ExcludeFood[]) {
     const oder = new Order({ restaurantId, shipping, cost, options });
 
     await this.repository.create(oder.toObject());
@@ -25,8 +25,8 @@ export class OrderService {
     return this.objectToOrderInstance(oderObj)
   }
 
-  public async getOrders(restaurantId?: string) {
-    const filter = !restaurantId ? {} : { restaurantId }
+  public async getOrders(restaurantId?: string, options = {}) {
+    const filter = !restaurantId ? options : { restaurantId, ...options }
     const oderObjs = await this.repository.find(filter);
 
     return oderObjs.map((f) => this.objectToOrderInstance(f))
