@@ -12,8 +12,6 @@ export default async function handler(
 
   const { id } = req.query
 
-  // const { restaurantId } = req.params
-
   try {
     const employeeService = new EmployeeService();
     const employee = await employeeService.getEmployeeById(id as string);
