@@ -14,7 +14,7 @@ type Props = {
   restaurants: IRestaurant[]
 }
 
-function Blog({ restaurants }: Props) {
+function Restaurants({ restaurants }: Props) {
   if (!restaurants.length) {
     return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
   }
@@ -74,4 +74,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default Blog
+export default Restaurants

@@ -16,7 +16,7 @@ type Props = {
   profit: number
 }
 
-function Food({ restaurant, profit }: Props) {
+function Restaurant({ restaurant, profit }: Props) {
   if (!restaurant) {
     return <ErrorPage statusCode={404} title={"Erro ao procurar restaurante"} />;
   }
@@ -98,4 +98,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 }
 
-export default Food
+export default Restaurant
