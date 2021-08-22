@@ -13,6 +13,7 @@ export default async function handler(
 
   try {
     const restaurantsService = new RestaurantService();
+    const { _id, name, city } = req.body
 
     switch (req.method) {
       case 'GET':
@@ -23,10 +24,14 @@ export default async function handler(
         const sortedFoods = restaurantsService.sortRestaurantsByName(restaurants)
         return res.status(200).json(sortedFoods);
       case 'POST':
-        const { name, city } = req.body
-        console.log(name, city)
-        await restaurantsService.createRestaurant(name as string, city as string)
-        res.status(200).end()
+
+        const id = await restaurantsService.createRestaurant(name, city)
+
+        return res.status(200).json({id})
+      case 'PATCH':
+        await restaurantsService.updateRestaurantById(_id, { name, city })
+
+        return res.status(200).end()
       default:
         break;
     }

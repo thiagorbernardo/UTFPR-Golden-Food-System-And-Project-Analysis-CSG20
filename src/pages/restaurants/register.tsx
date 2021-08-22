@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
-import { GetServerSideProps, GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
 import Head from "next/head";
 import { useCallback, useState } from "react";
@@ -14,30 +14,33 @@ import { BackButton } from "../../components/BackButton";
 import { Button } from "@material-ui/core";
 import { TextInput } from "../../components";
 
-type Props = {
-  restaurant: IRestaurant,
-}
-
 function Restaurant({ name, _id, city }: IRestaurant) {
   const [restaurantName, setName] = useState(name || '')
   const [restaurantCity, setCity] = useState(city || '')
   const router = useRouter()
 
-  const handleSubmit = async() => {
-    console.log({
-      name: restaurantName,
-      city: restaurantCity
-    })
-
-    console.log(`${env.app.url}/api/restaurants`)
-
+  const handleSubmit = async () => {
     try {
-      await axios.post(`${env.app.url}/api/restaurants`, {
-        name: restaurantName,
-        city: restaurantCity
-      })
+      if (_id) {
+        await axios.patch(`${env.app.url}/api/restaurants`, {
+          _id,
+          name: restaurantName,
+          city: restaurantCity
+        })
+
+        handleClickGoTo(`/restaurants/${_id}`)
+      }
+      else {
+        const res = await axios.post(`${env.app.url}/api/restaurants`, {
+          name: restaurantName,
+          city: restaurantCity
+        })
+
+        handleClickGoTo(`/restaurants/${res.data.id}`)
+      }
     } catch (error) {
       console.log(error)
+      return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
     }
 
   }
@@ -59,7 +62,7 @@ function Restaurant({ name, _id, city }: IRestaurant) {
       <BackButton />
 
       <h2 className={FormsStyle.title}>
-        {name ? "Editar" : "Criar"} Restaurante
+        {_id ? "Editar" : "Criar"} Restaurante
       </h2>
 
       <main className={styles.main}>
@@ -73,7 +76,7 @@ function Restaurant({ name, _id, city }: IRestaurant) {
         </div>
 
         <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isFieldFilled(restaurantName) || isFieldFilled(restaurantCity)}>
-          {name ? "Editar" : "Criar"}
+          {_id ? "Editar" : "Criar"}
         </Button>
       </main>
     </div>
@@ -85,18 +88,18 @@ interface IResultRestaurant {
   profit: number
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  // const { id } = context.params
+  const { restaurantId } = context.query
 
   try {
-    // const res = await axios.get<IResultRestaurant>(`${env.app.url}/api/restaurants/${id}`)
+    const res = await axios.get<IResultRestaurant>(`${env.app.url}/api/restaurants/${restaurantId}`)
 
-    // const {restaurant, profit} = res.data
+    const { restaurant } = res.data
 
     return {
       props: {
-        // name: "Golden"
+        ...restaurant
       },
     }
   } catch (error) {
