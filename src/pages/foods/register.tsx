@@ -14,7 +14,7 @@ import { BackButton } from "../../components/BackButton";
 import { Button } from "@material-ui/core";
 import { TextInput } from "../../components";
 
-function Restaurant({ name, _id, ingredients, price }: IFood) {
+function RegisterFood({ name, _id, ingredients, price }: IFood) {
   const [foodName, setName] = useState(name || '')
   const [foodIngredients, setIngredients] = useState(ingredients || [])
   const [foodPrice, setPrice] = useState(`${price}` || '')
@@ -27,7 +27,7 @@ function Restaurant({ name, _id, ingredients, price }: IFood) {
           _id,
           name: foodName,
           ingredients: foodIngredients,
-          price: foodPrice
+          price: +foodPrice
         })
 
         handleClickGoTo(`/foods/${_id}`)
@@ -36,7 +36,7 @@ function Restaurant({ name, _id, ingredients, price }: IFood) {
         const res = await axios.post(`${env.app.url}/api/foods`, {
           name: foodName,
           ingredients: foodIngredients,
-          price: foodPrice
+          price: +foodPrice
         })
 
         handleClickGoTo(`/foods/${res.data.id}`)
@@ -111,33 +111,27 @@ function Restaurant({ name, _id, ingredients, price }: IFood) {
   )
 }
 
-interface IResultRestaurant {
-  restaurant: IFood,
-  profit: number
-}
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  const { restaurantId } = context.query
+  const { foodId } = context.query
 
   try {
-    const res = await axios.get<IResultRestaurant>(`${env.app.url}/api/foods/${restaurantId}`)
+    const res = await axios.get<IFood>(`${env.app.url}/api/foods/${foodId}`)
 
-    const { restaurant } = res.data
+    const food = res.data
 
     return {
       props: {
-        ...restaurant
+        ...food
       },
     }
   } catch (error) {
     return {
       props: {
-        restaurant: {},
       },
     }
   }
 
 }
 
-export default Restaurant
+export default RegisterFood

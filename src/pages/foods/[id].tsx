@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 
 import { IFood } from "../../models/Food"
 import styles from '../../styles/Home.module.css'
@@ -14,6 +17,12 @@ function Food({ food }: Props) {
     return <ErrorPage statusCode={404} title={"Erro ao procurar receita"} />;
   }
 
+  const router = useRouter()
+
+  const handleClickGoTo = useCallback((route: string) => {
+    router.push(route)
+  }, [router])
+
   const totalOfIngredients = food.ingredients.length
   const getIngredients = () => food.ingredients.slice(0, totalOfIngredients - 1).join(', ') + ' e ' + food.ingredients[totalOfIngredients - 1]
 
@@ -25,11 +34,15 @@ function Food({ food }: Props) {
         </h1>
 
         <p className={styles.description}>
-        Preço: {`R$ ${food.price}`}
+          Preço: {`R$ ${food.price}`}
         </p>
 
         <p className={styles.description}>
-        Ingredientes: {getIngredients()}
+          Ingredientes: {getIngredients()}
+        </p>
+
+        <p className={styles.button} onClick={() => (handleClickGoTo(`/foods/register?foodId=${food._id}`))}>
+          Editar
         </p>
       </main>
     </div>
@@ -37,7 +50,7 @@ function Food({ food }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) =>  {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { id } = context.query
 
@@ -46,11 +59,11 @@ export const getServerSideProps: GetServerSideProps = async (context) =>  {
 
     const food: IFood = await res.data
 
-  return {
-    props: {
-      food,
-    },
-  }
+    return {
+      props: {
+        food,
+      },
+    }
   } catch (error) {
     return {
       props: {
