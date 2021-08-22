@@ -14,6 +14,8 @@ export class EmployeeService {
     const employee = new Employee({ name, restaurantId, score, workHours });
 
     await this.repository.create(employee.toObject());
+
+    return employee._id
   }
 
   public async getEmployeeById(_id: string, restaurantId?: string) {

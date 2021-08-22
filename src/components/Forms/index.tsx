@@ -11,19 +11,24 @@ type TextInputProps = {
   error: boolean
   type?: string
   helperText?: string
+  select?: boolean
 }
 
-export const TextInput: React.FC<TextInputProps> = ({id, value, label, onChange, error, helperText, type}) => {
+export const TextInput: React.FC<TextInputProps> = ({id, value, label, onChange, error, helperText, type, select, children}) => {
   return (<TextField
     required
+    select={select || false}
     error={error}
     id={id}
     label={label}
     // defaultValue={name || ""}
     value={value}
     onChange={e => onChange(e.target.value)}
-    helperText={error ? helperText || "Você precisa preencher esse valor.": ""}
+    helperText={error ? helperText || "Você precisa preencher esse valor." : ""}
     variant="filled"
     type={type || ""}
-  />)
+    style={{width: "500px"}}
+  >
+    {children}
+  </TextField>)
 }

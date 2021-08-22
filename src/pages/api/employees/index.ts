@@ -10,8 +10,10 @@ export default async function handler(
   await dbConnect();
 
   const { restaurantId } = req.query
+  const { _id, name, score, workHours } = req.body
 
   const employeesService = new EmployeeService();
+
   switch (req.method) {
     case 'GET':
       try {
@@ -24,9 +26,15 @@ export default async function handler(
         return res.status(500).end();
       }
     case 'POST':
-      await employeesService.createEmployee('Yuiti', '27f224c6-160c-4221-a5aa-b29c7741cdc1', 10, 7)
-      res.end()
+      const id = await employeesService.createEmployee(name as string, restaurantId as string, +score, +workHours)
+
+      return res.status(200).json({ id })
+    case 'PATCH':
+      await employeesService.updateEmployeeById(_id as string, { name: name as string, restaurantId: restaurantId as string, score: +score, workHours: +workHours })
+
+      return res.status(200).end()
     default:
       break;
   }
 }
+
