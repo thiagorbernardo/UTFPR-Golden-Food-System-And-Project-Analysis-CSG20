@@ -138,7 +138,7 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  const { foodId } = context.query
+  const { employeeId } = context.query
 
   const getRestaurantOptions = async () => {
     const restaurantsResponse = await axios.get<IRestaurant>(`${env.app.url}/api/restaurants`)
@@ -147,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-    const res = await axios.get<IEmployee>(`${env.app.url}/api/employees/${foodId}`)
+    const res = await axios.get<IEmployee>(`${env.app.url}/api/employees/${employeeId}`)
 
     const employee = res.data
 
