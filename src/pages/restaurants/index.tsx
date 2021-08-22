@@ -9,6 +9,7 @@ import { IRestaurant } from "../../models"
 import styles from '../../styles/BaseScreens.module.css'
 import env from "../../config/Environment";
 import { BackButton } from "../../components/BackButton";
+import { StandardCard } from "../../components";
 
 type Props = {
   restaurants: IRestaurant[]
@@ -24,7 +25,9 @@ function Restaurants({ restaurants }: Props) {
       <Head>
         <title>Restaurantes</title>
       </Head>
-      <BackButton/>
+      <BackButton />
+
+      {StandardCard("Criar Restaurante", "/restaurants/register")}
 
       {restaurants.map(({_id, city, name}) => (
         <Card key={_id} _id={_id} city={city} name={name}/>

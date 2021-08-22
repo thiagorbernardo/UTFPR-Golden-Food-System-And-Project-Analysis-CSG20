@@ -1,27 +1,13 @@
-import { useCallback } from "react";
-import { useRouter } from 'next/router'
+import styles from '../../styles/Forms.module.css'
 
-import styles from '../../styles/BaseScreens.module.css'
-import { IRestaurant } from "../../models"
 
-type Props = {}
-
-export const Card: React.FC<IRestaurant> = ({ _id, name, city }) => {
-  const router = useRouter()
-
-  const handleClickGoTo = useCallback((route: string) => {
-    router.push(route)
-  }, [router])
-
+export const StandardCard = (title: string, route: string) => {
   return (
     <a
       className={styles.card}
-      key={_id}
-      onClick={() =>  handleClickGoTo(`/restaurants/${_id}`)}
+      href={route}
     >
-      <h2>{name}</h2>
-      <p>{city}</p>
+      <h2>{title}</h2>
     </a>
-
   )
 }
