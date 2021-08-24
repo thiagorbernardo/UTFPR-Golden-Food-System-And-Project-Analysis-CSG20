@@ -10,6 +10,7 @@
     "dev:deploy": "npx lt --subdomain golden-food -p 3000 -o"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
     "@types/mongoose": "^5.11.97",
     "@types/uuid": "^8.3.1",
     "axios": "^0.21.1",

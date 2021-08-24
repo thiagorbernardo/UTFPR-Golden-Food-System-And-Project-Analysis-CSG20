@@ -1,10 +1,11 @@
 import { GetServerSideProps } from "next"
 import Head from 'next/head'
 import ErrorPage from "next/error";
+import axios from "axios";
 
 import { IEmployee } from "../../models";
 import styles from '../../styles/BaseScreens.module.css'
-import axios from "axios";
+import { StandardCard } from "../../components";
 
 type Props = {
   employees: IEmployee[]
@@ -21,11 +22,10 @@ function Blog({ employees }: Props) {
         <title>Funcionários</title>
       </Head>
 
-      {/* <div className={styles.grid}> */}
+      {StandardCard("Registrar Funcionário", "/employees/register")}
       {employees.map((post) => (
         card(post)
       ))}
-      {/* </div> */}
     </main>
 
   )

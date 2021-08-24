@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
 import { IFood } from '../../../models';
-// import Food, { IFood } from '../../../models/Food'
 import dbConnect from '../../../server/mongo'
 import { FoodService } from '../../../service/Food';
 
@@ -13,11 +13,26 @@ export default async function handler(
 
   try {
     const foodService = new FoodService();
-    const foods = await foodService.getFoods();
+    const { _id, name, ingredients, price } = req.body
 
-    const sortedFoods = foodService.sortFoodsByName(foods)
+    switch (req.method) {
+      case 'GET':
+        const foods = await foodService.getFoods();
 
-    return res.status(200).json(sortedFoods);
+        const sortedFoods = foodService.sortFoodsByName(foods)
+
+        return res.status(200).json(sortedFoods);
+      case 'POST':
+        const id = await foodService.createFood(name, ingredients, price)
+
+        return res.status(200).json({ id })
+      case 'PATCH':
+        await foodService.updateFoodById(_id, { name, ingredients, price })
+
+        return res.status(200).end()
+      default:
+        break;
+    }
   } catch (err) {
     return res.status(500).end();
   }

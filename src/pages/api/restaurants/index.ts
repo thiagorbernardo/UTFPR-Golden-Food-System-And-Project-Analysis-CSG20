@@ -12,15 +12,29 @@ export default async function handler(
   await dbConnect();
 
   try {
-
     const restaurantsService = new RestaurantService();
-    const restaurants = await restaurantsService.getRestaurants();
+    const { _id, name, city } = req.body
 
-    if (!restaurants) return res.status(400).end()
+    switch (req.method) {
+      case 'GET':
+        const restaurants = await restaurantsService.getRestaurants();
 
-    const sortedFoods = restaurantsService.sortRestaurantsByName(restaurants)
+        if (!restaurants) return res.status(400).end()
 
-    return res.status(200).json(sortedFoods);
+        const sortedFoods = restaurantsService.sortRestaurantsByName(restaurants)
+        return res.status(200).json(sortedFoods);
+      case 'POST':
+
+        const id = await restaurantsService.createRestaurant(name, city)
+
+        return res.status(200).json({id})
+      case 'PATCH':
+        await restaurantsService.updateRestaurantById(_id, { name, city })
+
+        return res.status(200).end()
+      default:
+        break;
+    }
   } catch (err) {
     return res.status(500).end();
   }

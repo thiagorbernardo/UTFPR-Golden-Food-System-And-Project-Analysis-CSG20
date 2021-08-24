@@ -17,6 +17,8 @@ export class RestaurantService {
     const food = new Restaurant({ name, city });
 
     await this.repository.create(food.toObject());
+
+    return food._id
   }
 
   public async getRestaurantById(_id: string) {

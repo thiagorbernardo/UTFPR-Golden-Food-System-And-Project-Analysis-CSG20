@@ -9,12 +9,13 @@ import { IRestaurant } from "../../models"
 import styles from '../../styles/BaseScreens.module.css'
 import env from "../../config/Environment";
 import { BackButton } from "../../components/BackButton";
+import { StandardCard } from "../../components";
 
 type Props = {
   restaurants: IRestaurant[]
 }
 
-function Blog({ restaurants }: Props) {
+function Restaurants({ restaurants }: Props) {
   if (!restaurants.length) {
     return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
   }
@@ -24,7 +25,9 @@ function Blog({ restaurants }: Props) {
       <Head>
         <title>Restaurantes</title>
       </Head>
-      <BackButton/>
+      <BackButton />
+
+      {StandardCard("Criar Restaurante", "/restaurants/register")}
 
       {restaurants.map(({_id, city, name}) => (
         <Card key={_id} _id={_id} city={city} name={name}/>
@@ -74,4 +77,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default Blog
+export default Restaurants

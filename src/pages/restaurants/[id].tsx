@@ -16,7 +16,7 @@ type Props = {
   profit: number
 }
 
-function Food({ restaurant, profit }: Props) {
+function Restaurant({ restaurant, profit }: Props) {
   if (!restaurant) {
     return <ErrorPage statusCode={404} title={"Erro ao procurar restaurante"} />;
   }
@@ -61,6 +61,10 @@ function Food({ restaurant, profit }: Props) {
           <p className={styles.button} onClick={() =>  handleClickGoTo(`/menus/`)}>
             Cardápio
           </p>
+
+          <p className={styles.button} onClick={() => (handleClickGoTo(`/restaurants/register?restaurantId=${restaurant._id}`))}>
+            Editar
+          </p>
         </div>
       </main>
     </div>
@@ -98,4 +102,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 }
 
-export default Food
+export default Restaurant

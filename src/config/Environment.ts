@@ -4,7 +4,7 @@ const mongo = {
 };
 
 const app = {
-  url: process.env.URL
+  url: process.env.URL || "http://localhost:3000"
 }
 
 export default Object.freeze({

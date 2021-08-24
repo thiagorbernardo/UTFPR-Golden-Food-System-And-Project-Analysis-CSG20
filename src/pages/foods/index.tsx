@@ -4,8 +4,8 @@ import ErrorPage from "next/error";
 
 import { IFood } from "../../models/Food"
 import styles from '../../styles/BaseScreens.module.css'
-import Image from "next/image";
 import axios from "axios";
+import { StandardCard } from "../../components";
 
 type Props = {
   foods: IFood[]
@@ -22,11 +22,10 @@ function Blog({ foods }: Props) {
         <title>Receitas</title>
       </Head>
 
-      {/* <div className={styles.grid}> */}
+      {StandardCard("Registrar Receita", "/foods/register")}
       {foods.map((post) => (
         card(post)
       ))}
-      {/* </div> */}
     </main>
 
   )
@@ -40,7 +39,6 @@ const card = ({ _id, name, ingredients }: IFood) => {
       href={`/foods/${_id}`}
     >
       <h2>{name}</h2>
-      {/* <p>Ingredientes: {ingredients.join(', ')}</p> */}
     </a>
 
   )

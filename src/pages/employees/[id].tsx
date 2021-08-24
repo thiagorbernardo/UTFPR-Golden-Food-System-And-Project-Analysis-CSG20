@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 
 import { IEmployee } from "../../models"
 import styles from '../../styles/Home.module.css'
@@ -14,8 +17,11 @@ function Food({ employee }: Props) {
     return <ErrorPage statusCode={404} title={"Erro ao procurar funcionário"} />;
   }
 
-  // const totalOfIngredients = employee.ingredients.length
-  // const getIngredients = () => employee.ingredients.slice(0, totalOfIngredients - 1).join(', ') + ' e ' + employee.ingredients[totalOfIngredients - 1]
+  const router = useRouter()
+
+  const handleClickGoTo = useCallback((route: string) => {
+    router.push(route)
+  }, [router])
 
   return (
     <div className={styles.container}>
@@ -25,19 +31,23 @@ function Food({ employee }: Props) {
         </h1>
 
         <p className={styles.description}>
-        Score: {employee.score}
+          Score: {employee.score}
         </p>
 
-        {/* <p className={styles.description}>
-        Ingredientes: {employee.}
-        </p> */}
+        <p className={styles.description}>
+          Horas de trabalho: <b>{employee.workHours} horas</b> por dia
+        </p>
+
+        <p className={styles.button} onClick={() => (handleClickGoTo(`/employees/register?employeeId=${employee._id}`))}>
+          Editar
+        </p>
       </main>
     </div>
 
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) =>  {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { id } = context.query
 
@@ -46,11 +56,11 @@ export const getServerSideProps: GetServerSideProps = async (context) =>  {
 
     const employee: IEmployee = await res.data
 
-  return {
-    props: {
-      employee,
-    },
-  }
+    return {
+      props: {
+        employee,
+      },
+    }
   } catch (error) {
     return {
       props: {

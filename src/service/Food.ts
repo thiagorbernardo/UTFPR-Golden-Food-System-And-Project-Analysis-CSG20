@@ -14,6 +14,8 @@ export class FoodService {
     const food = new Food({ name, ingredients, price });
 
     await this.repository.create(food.toObject());
+
+    return food._id
   }
 
   public async getFoodById(_id: string) {
