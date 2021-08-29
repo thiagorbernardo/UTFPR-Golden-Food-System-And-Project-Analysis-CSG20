@@ -50,7 +50,7 @@ function Restaurant({ restaurant, profit }: Props) {
         </p>
 
         <div className={styles.buttonGrid}>
-          <p className={styles.button} onClick={() =>  handleClickGoTo(`/orders/`)}>
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/orders/${restaurant._id}`)}>
             Pedidos
           </p>
 

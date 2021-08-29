@@ -8,17 +8,18 @@ import styles from '../../styles/BaseScreens.module.css'
 import { StandardCard } from "../../components";
 
 type Props = {
-  employees: IEmployee[]
+  employees: IEmployee[],
+  restaurantId: string
 }
 
-function Blog({ employees }: Props) {
+function Blog({ employees, restaurantId }: Props) {
   return (
     <main className={styles.main}>
       <Head>
         <title>Funcionários</title>
       </Head>
 
-      {StandardCard("Registrar Funcionário", "/employees/register")}
+      {StandardCard("Registrar Funcionário", `/employees/register?restaurantId=${restaurantId}`)}
       {employees.map((post) => (
         card(post)
       ))}
@@ -55,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         employees,
+        restaurantId
       },
     }
   } catch (error) {

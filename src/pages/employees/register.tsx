@@ -92,6 +92,7 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
             onChange={setRestaurantId}
             error={isFieldFilled(employeeRestaurantId)}
             select
+            disabled={restaurantId != null }
           >
             {restaurantOptions.map((option) => (
             <MenuItem key={option._id} value={option._id}>
@@ -138,7 +139,7 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  const { employeeId } = context.query
+  const { employeeId, restaurantId } = context.query
 
   const getRestaurantOptions = async () => {
     const restaurantsResponse = await axios.get<IRestaurant>(`${env.app.url}/api/restaurants`)
@@ -154,13 +155,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         ...employee,
-        restaurantOptions: await getRestaurantOptions()
+        restaurantOptions: await getRestaurantOptions(),
+        restaurantId: restaurantId || null
       },
     }
   } catch (error) {
     return {
       props: {
-        restaurantOptions: await getRestaurantOptions()
+        restaurantOptions: await getRestaurantOptions(),
+        restaurantId: restaurantId || null
       },
     }
   }

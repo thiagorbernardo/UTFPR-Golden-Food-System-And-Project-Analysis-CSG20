@@ -22,6 +22,10 @@ interface Props extends IOrder {
 }
 
 function RegisterOrder({ _id, cost, shipping, options, status, restaurantId, foods }: Props) {
+  if (!foods.length) {
+    return <ErrorPage statusCode={404} title={"Esse restaurante não possui um cardápio para poder criar um pedido!"} />;
+  }
+
   const [orderOptions, setOptions] = useState(options || [])
   const [selectedOptions, setSelected] = useState<string[]>([])
   const [orderShipping, setShipping] = useState(shipping ? `${shipping}` : '')
@@ -178,7 +182,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } catch (error) {
     return {
       props: {
-        foods: []
+        foods: [],
+        restaurantId
       },
     }
   }
