@@ -21,7 +21,7 @@ interface Props extends IOrder {
 }
 
 function RegisterOrder({ _id, cost, shipping, options, status, restaurantId, foods }: Props) {
-  if (!foods.length) {
+  if (!foods.length && !_id) {
     return <ErrorPage statusCode={404} title={"Esse restaurante não possui um cardápio para poder criar um pedido!"} />;
   }
 
