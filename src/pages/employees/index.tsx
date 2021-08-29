@@ -7,13 +7,13 @@ import { StandardCard } from "../../components";
 
 type Props = {
   employees: IEmployee[],
-  restaurantId: string
+  restaurantId: string | null
 }
 
 function Blog({ employees, restaurantId }: Props) {
   return (
     <main className={styles.main}>
-      {StandardCard("Registrar Funcionário", `/employees/register?restaurantId=${restaurantId}`)}
+      {StandardCard("Registrar Funcionário", restaurantId ? `/employees/register?restaurantId=${restaurantId}` : `/employees/register`)}
       {employees.map((post) => (
         card(post)
       ))}
@@ -30,7 +30,6 @@ const card = ({ _id, name }: IEmployee) => {
       href={`/employees/${_id}`}
     >
       <h2>{name}</h2>
-      {/* <p>Ingredientes: {ingredients.join(', ')}</p> */}
     </a>
 
   )
@@ -45,12 +44,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         restaurantId
       }
     })
+
       const employees: IEmployee[] = res.data
 
     return {
       props: {
         employees,
-        restaurantId
+        restaurantId: restaurantId || null
       },
     }
   } catch (error) {

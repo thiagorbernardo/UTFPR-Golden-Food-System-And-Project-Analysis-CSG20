@@ -81,7 +81,7 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
           <TextInput
             id="restaurantId"
             value={employeeRestaurantId}
-            label="Nome"
+            label="Restaurante"
             onChange={setRestaurantId}
             error={isFieldFilled(employeeRestaurantId)}
             select
