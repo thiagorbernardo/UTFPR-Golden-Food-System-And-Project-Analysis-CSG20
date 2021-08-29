@@ -58,7 +58,7 @@ function Restaurant({ restaurant, profit }: Props) {
             Funcionários
           </p>
 
-          <p className={styles.button} onClick={() =>  handleClickGoTo(`/menus/`)}>
+          <p className={styles.button} onClick={() =>  handleClickGoTo(`/menus?restaurantId=${restaurant._id}`)}>
             Cardápio
           </p>
 

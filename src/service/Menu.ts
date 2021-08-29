@@ -40,7 +40,8 @@ export class MenuService {
     const availableOptions = options.filter(value => !menu.unavailableFoods.includes(value))
 
     const foods = await this.foodService.getFoods(availableOptions);
+    const sortedFoods = this.foodService.sortFoodsByName(foods)
 
-    return foods;
+    return sortedFoods;
   }
 }
