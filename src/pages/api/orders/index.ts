@@ -11,7 +11,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await dbConnect();
-  const { restaurantId, shipping, cost, options, _id } = req.query
+  const { restaurantId } = req.query
+  const { shipping, cost, status, options, _id } = req.body
   try {
 
     const ordersService = new OrderService();

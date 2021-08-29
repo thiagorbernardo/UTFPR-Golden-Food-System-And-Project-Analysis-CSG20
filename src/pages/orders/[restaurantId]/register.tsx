@@ -3,8 +3,9 @@ import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
 import Head from "next/head";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
+import MenuItem from '@material-ui/core/MenuItem';
 
 import { IOrder } from "../../../models"
 import env from "../../../config/Environment";
@@ -86,10 +87,16 @@ function RegisterOrder({ _id, cost, shipping, options, status, restaurantId }: I
                         label="status"
                         onChange={setStatus}
                         error={isFieldFilled(orderStatus)}
-                    />
+                        select
+                    >
+                        {Object.values(OrderStatus).map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextInput>
                 </div> : <></>
                 }
-
                 <div className={FormsStyle.item}>
                     <TextInput
                         id="shipping"
