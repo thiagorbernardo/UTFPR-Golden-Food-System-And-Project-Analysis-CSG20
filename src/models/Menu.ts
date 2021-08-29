@@ -39,7 +39,6 @@ export class Menu {
 const MenuSchema: Schema = new Schema({
   _id: { type: String, required: true },
   restaurantId: { type: String, required: true },
-  ingredients: { type: [String], required: true },
   dessert: { type: [String], required: true },
   drinks: { type: [String], required: true },
   mainCourse: { type: [String], required: true },

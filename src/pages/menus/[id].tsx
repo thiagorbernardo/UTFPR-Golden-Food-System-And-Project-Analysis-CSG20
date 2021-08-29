@@ -2,30 +2,27 @@ import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
 
-import { IFood } from "../../models/Food"
+import { IMenu } from "../../models/Menu"
 import styles from '../../styles/Home.module.css'
 
 type Props = {
-  food: IFood
+  menu: IMenu
 }
 
-function Food({ food }: Props) {
-  if (!food) {
-    return <ErrorPage statusCode={404} title={"Erro ao procurar food"} />;
+function Food({ menu }: Props) {
+  if (!menu) {
+    return <ErrorPage statusCode={404} title={"Erro ao procurar menu"} />;
   }
-
-  const totalOfIngredients = food.ingredients.length
-  const getIngredients = () => food.ingredients.slice(0, totalOfIngredients - 1).join(', ') + ' e ' + food.ingredients[totalOfIngredients - 1]
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {food.name}
+          {menu.}
         </h1>
 
         <p className={styles.description}>
-        Preço: {`R$ ${food.price}`}
+        Preço: {`R$ ${menu.price}`}
         </p>
 
         <p className={styles.description}>
@@ -36,7 +33,18 @@ function Food({ food }: Props) {
 
   )
 }
+const card = ({ _id, name}: IMenu) => {
+  return (
+    <a
+      className={styles.card}
+      key={_id}
+      href={`/foods/${_id}`}
+    >
+      <h2>{name}</h2>
+    </a>
 
+  )
+}
 export const getServerSideProps: GetServerSideProps = async (context) =>  {
 
   const { id } = context.query
@@ -44,17 +52,17 @@ export const getServerSideProps: GetServerSideProps = async (context) =>  {
   try {
     const res = await axios.get(`http://localhost:3000/api/foods/${id}`)
 
-    const food: IFood = await res.data
+    const menu: IFood = await res.data
 
   return {
     props: {
-      food,
+      menu,
     },
   }
   } catch (error) {
     return {
       props: {
-        food: {},
+        menu: {},
       },
     }
   }

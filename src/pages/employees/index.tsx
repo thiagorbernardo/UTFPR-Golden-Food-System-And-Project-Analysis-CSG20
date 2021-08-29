@@ -12,10 +12,6 @@ type Props = {
 }
 
 function Blog({ employees }: Props) {
-  if (!employees.length) {
-    return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
-  }
-
   return (
     <main className={styles.main}>
       <Head>
