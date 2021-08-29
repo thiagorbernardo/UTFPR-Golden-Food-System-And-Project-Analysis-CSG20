@@ -2,7 +2,6 @@
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
-import Head from "next/head";
 import { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
 import MenuItem from '@material-ui/core/MenuItem';
@@ -63,12 +62,6 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Cadastro | Golden Food</title>
-      </Head>
-
-      <BackButton />
-
       <h2 className={FormsStyle.title}>
         {_id ? "Editar" : "Registrar"} Funcionário
       </h2>
@@ -88,10 +81,11 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
           <TextInput
             id="restaurantId"
             value={employeeRestaurantId}
-            label="Nome"
+            label="Restaurante"
             onChange={setRestaurantId}
             error={isFieldFilled(employeeRestaurantId)}
             select
+            disabled={restaurantId != null }
           >
             {restaurantOptions.map((option) => (
             <MenuItem key={option._id} value={option._id}>
@@ -138,7 +132,7 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  const { employeeId } = context.query
+  const { employeeId, restaurantId } = context.query
 
   const getRestaurantOptions = async () => {
     const restaurantsResponse = await axios.get<IRestaurant>(`${env.app.url}/api/restaurants`)
@@ -153,14 +147,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
+        restaurantId: restaurantId || null,
         ...employee,
-        restaurantOptions: await getRestaurantOptions()
+        restaurantOptions: await getRestaurantOptions(),
       },
     }
   } catch (error) {
     return {
       props: {
-        restaurantOptions: await getRestaurantOptions()
+        restaurantId: restaurantId || null,
+        restaurantOptions: await getRestaurantOptions(),
       },
     }
   }

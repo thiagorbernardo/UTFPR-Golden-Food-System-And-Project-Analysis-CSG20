@@ -19,10 +19,8 @@ export default async function handler(
     if (!restaurant) return res.status(400).end()
 
     const profit = await restaurantService.getProfit(id as string)
-    return res.status(200).json({restaurant: restaurant.toObject(), profit});
 
-
-
+    return res.status(200).json({ restaurant: restaurant.toObject(), profit });
   } catch (err) {
     return res.status(500).end();
   }

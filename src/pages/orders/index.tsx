@@ -1,65 +1,70 @@
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
 import ErrorPage from "next/error";
+import axios from "axios";
+import { useCallback } from "react";
+import { useRouter } from 'next/router'
 
-import { IFood } from "../../models/Food"
+import { IOrder, IRestaurant } from "../../models"
 import styles from '../../styles/BaseScreens.module.css'
-import Image from "next/image";
+import env from "../../config/Environment";
+import { BackButton } from "../../components/BackButton";
 
 type Props = {
-  foods: IFood[]
+  restaurants: IRestaurant[]
 }
 
-function Blog({ foods }: Props) {
-  if (!foods.length) {
+function Blog({ restaurants }: Props) {
+  if (!restaurants.length) {
     return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
   }
 
   return (
-    <main className={styles.main}>
-      <Head>
-        <title>Receitas</title>
-      </Head>
-
-      {/* <div className={styles.grid}> */}
-      {foods.map((post) => (
-        card(post)
+    <main className={styles.main} >
+      {restaurants.map(({ _id, city, name }) => (
+        <Card key={_id} _id={_id} city={city} name={name} />
       ))}
-      {/* </div> */}
+
     </main>
 
   )
 }
 
-const card = ({ _id, name, ingredients }: IFood) => {
+
+const Card: React.FC<IRestaurant> = ({ _id, name, city }) => {
+  const router = useRouter()
+
+  const handleClickGoTo = useCallback((route: string) => {
+    router.push(route)
+  }, [router])
+
   return (
     <a
       className={styles.card}
       key={_id}
-      href={`/foods/${_id}`}
+      onClick={() => handleClickGoTo(`/orders/${_id}`)}
     >
       <h2>{name}</h2>
-      {/* <p>Ingredientes: {ingredients.join(', ')}</p> */}
+      <p>{city}</p>
     </a>
 
   )
 }
 
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-
-      const res = await fetch('http://localhost:3000/api/foods')
-      const foods: IFood[] = await res.json()
+    const res = await axios.get(`${env.app.url}/api/restaurants`)
+    const restaurants: IRestaurant[] = res.data
 
     return {
       props: {
-        foods,
+        restaurants,
       },
     }
   } catch (error) {
     return {
       props: {
-        foods: [],
+        restaurants: [],
       },
     }
   }

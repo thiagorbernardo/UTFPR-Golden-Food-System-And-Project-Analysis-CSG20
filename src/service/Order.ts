@@ -11,25 +11,26 @@ export class OrderService {
   }
 
   public async createOrder(restaurantId: string, shipping: number, cost: number, options: ExcludeFood[]) {
-    const oder = new Order({ restaurantId, shipping, cost, options });
+    const order = new Order({ restaurantId, shipping, cost, options });
 
-    await this.repository.create(oder.toObject());
+    await this.repository.create(order.toObject());
+    return order._id;
   }
 
   public async getOrderById(_id: string, restaurantId?: string) {
     const filter = !restaurantId ? { _id } : { _id, restaurantId }
-    const oderObj = await this.repository.findOne(filter);
+    const orderObj = await this.repository.findOne(filter);
 
-    if (!oderObj) return null
+    if (!orderObj) return null
 
-    return this.objectToOrderInstance(oderObj)
+    return this.objectToOrderInstance(orderObj)
   }
 
   public async getOrders(restaurantId?: string, options = {}) {
     const filter = !restaurantId ? options : { restaurantId, ...options }
-    const oderObjs = await this.repository.find(filter);
+    const orderObjs = await this.repository.find(filter);
 
-    return oderObjs.map((f) => this.objectToOrderInstance(f))
+    return orderObjs.map((f) => this.objectToOrderInstance(f))
   }
 
   public async updateOrderById(_id: string, obj: Partial<IOrder>) {

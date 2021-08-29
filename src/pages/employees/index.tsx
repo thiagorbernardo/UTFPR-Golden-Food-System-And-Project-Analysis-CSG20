@@ -1,6 +1,4 @@
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
-import ErrorPage from "next/error";
 import axios from "axios";
 
 import { IEmployee } from "../../models";
@@ -8,21 +6,14 @@ import styles from '../../styles/BaseScreens.module.css'
 import { StandardCard } from "../../components";
 
 type Props = {
-  employees: IEmployee[]
+  employees: IEmployee[],
+  restaurantId: string | null
 }
 
-function Blog({ employees }: Props) {
-  if (!employees.length) {
-    return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
-  }
-
+function Blog({ employees, restaurantId }: Props) {
   return (
     <main className={styles.main}>
-      <Head>
-        <title>Funcionários</title>
-      </Head>
-
-      {StandardCard("Registrar Funcionário", "/employees/register")}
+      {StandardCard("Registrar Funcionário", restaurantId ? `/employees/register?restaurantId=${restaurantId}` : `/employees/register`)}
       {employees.map((post) => (
         card(post)
       ))}
@@ -39,7 +30,6 @@ const card = ({ _id, name }: IEmployee) => {
       href={`/employees/${_id}`}
     >
       <h2>{name}</h2>
-      {/* <p>Ingredientes: {ingredients.join(', ')}</p> */}
     </a>
 
   )
@@ -54,11 +44,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         restaurantId
       }
     })
+
       const employees: IEmployee[] = res.data
 
     return {
       props: {
         employees,
+        restaurantId: restaurantId || null
       },
     }
   } catch (error) {

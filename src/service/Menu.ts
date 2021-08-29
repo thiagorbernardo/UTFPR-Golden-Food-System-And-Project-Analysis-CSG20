@@ -1,10 +1,12 @@
 import { Document } from "mongoose";
 import { Menu, MenuModel, IMenu } from "../models";
 import { BaseRepository } from "../repositories";
+import { FoodService } from "./Food";
 
 
 export class MenuService {
   private repository = new BaseRepository<IMenu>(MenuModel);
+  private foodService = new FoodService();
 
   private objectToMenuInstance(obj: (IMenu & Document)) {
     return new Menu(obj.toObject());
@@ -30,5 +32,16 @@ export class MenuService {
 
   public async updateMenuById(_id: string, obj: Partial<IMenu>) {
     await this.repository.update(_id, obj)
+  }
+
+  public async getFoodsFromMenu(menu: Menu) {
+    const options = [...menu.dessert, ...menu.drinks, ...menu.general, ...menu.mainCourse]
+
+    const availableOptions = options.filter(value => !menu.unavailableFoods.includes(value))
+
+    const foods = await this.foodService.getFoods(availableOptions);
+    const sortedFoods = this.foodService.sortFoodsByName(foods)
+
+    return sortedFoods;
   }
 }

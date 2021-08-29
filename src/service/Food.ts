@@ -26,8 +26,9 @@ export class FoodService {
     return this.objectToFoodInstance(foodObj)
   }
 
-  public async getFoods() {
-    const foodObjs = await this.repository.find({});
+  public async getFoods(foods?: string[]) {
+    const filter = !foods ? {} : { "_id": { "$in": foods } };
+    const foodObjs = await this.repository.find(filter);
 
     return foodObjs.map((f) => this.objectToFoodInstance(f))
   }

@@ -1,5 +1,4 @@
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
 import ErrorPage from "next/error";
 
 import { IFood } from "../../models/Food"
@@ -18,10 +17,6 @@ function Blog({ foods }: Props) {
 
   return (
     <main className={styles.main}>
-      <Head>
-        <title>Receitas</title>
-      </Head>
-
       {StandardCard("Registrar Receita", "/foods/register")}
       {foods.map((post) => (
         card(post)

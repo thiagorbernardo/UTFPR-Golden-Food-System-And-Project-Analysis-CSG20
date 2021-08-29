@@ -2,7 +2,6 @@
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
-import Head from "next/head";
 import { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
 
@@ -57,12 +56,6 @@ function RegisterFood({ name, _id, ingredients, price }: IFood) {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Cadastro | Golden Food</title>
-      </Head>
-
-      <BackButton />
-
       <h2 className={FormsStyle.title}>
         {_id ? "Editar" : "Registrar"} Receita
       </h2>
