@@ -147,16 +147,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
+        restaurantId: restaurantId || null,
         ...employee,
         restaurantOptions: await getRestaurantOptions(),
-        restaurantId: restaurantId || null
       },
     }
   } catch (error) {
     return {
       props: {
+        restaurantId: restaurantId || null,
         restaurantOptions: await getRestaurantOptions(),
-        restaurantId: restaurantId || null
       },
     }
   }
