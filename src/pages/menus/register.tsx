@@ -2,19 +2,17 @@
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
-import Head from "next/head";
 import React, { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { IFood, IMenu, IOrder } from "../../models"
+import { IFood, IMenu } from "../../models"
 import env from "../../config/Environment";
 import styles from '../../styles/Home.module.css'
 import FormsStyle from '../../styles/Forms.module.css'
 import { BackButton } from "../../components/BackButton";
 import { Button } from "@material-ui/core";
 import { TextSelect } from "../../components";
-import { OrderStatus } from "../../enum";
 
 interface Props {
   menu: IMenu
@@ -67,12 +65,6 @@ function RegisterOrder({ menu, foods, restaurantId }: Props) {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Cadastro | Golden Food</title>
-      </Head>
-
-      <BackButton />
-
       <h2 className={FormsStyle.title}>
         {menu ? "Editar" : "Registrar"} Cardápio
       </h2>

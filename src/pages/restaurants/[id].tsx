@@ -2,14 +2,12 @@
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
-import Head from "next/head";
 import { useCallback } from "react";
 import { useRouter } from 'next/router'
 
 import { IRestaurant } from "../../models"
 import styles from '../../styles/Home.module.css'
 import env from "../../config/Environment";
-import { BackButton } from "../../components/BackButton";
 
 type Props = {
   restaurant: IRestaurant,
@@ -30,12 +28,6 @@ function Restaurant({ restaurant, profit }: Props) {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>{restaurant.name}</title>
-      </Head>
-
-      <BackButton />
-
       <main className={styles.main}>
         <h1 className={styles.title}>
           {restaurant.name}

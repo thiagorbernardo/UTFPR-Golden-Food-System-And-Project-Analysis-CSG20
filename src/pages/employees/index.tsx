@@ -1,6 +1,4 @@
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
-import ErrorPage from "next/error";
 import axios from "axios";
 
 import { IEmployee } from "../../models";
@@ -15,10 +13,6 @@ type Props = {
 function Blog({ employees, restaurantId }: Props) {
   return (
     <main className={styles.main}>
-      <Head>
-        <title>Funcionários</title>
-      </Head>
-
       {StandardCard("Registrar Funcionário", `/employees/register?restaurantId=${restaurantId}`)}
       {employees.map((post) => (
         card(post)

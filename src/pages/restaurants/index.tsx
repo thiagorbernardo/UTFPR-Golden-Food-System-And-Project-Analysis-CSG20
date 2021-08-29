@@ -1,5 +1,4 @@
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
 import ErrorPage from "next/error";
 import axios from "axios";
 import { useCallback } from "react";
@@ -22,11 +21,6 @@ function Restaurants({ restaurants }: Props) {
 
   return (
     <main className={styles.main} >
-      <Head>
-        <title>Restaurantes</title>
-      </Head>
-      <BackButton />
-
       {StandardCard("Criar Restaurante", "/restaurants/register")}
 
       {restaurants.map(({_id, city, name}) => (

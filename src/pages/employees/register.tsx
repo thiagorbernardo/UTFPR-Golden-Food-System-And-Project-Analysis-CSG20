@@ -2,7 +2,6 @@
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
-import Head from "next/head";
 import { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
 import MenuItem from '@material-ui/core/MenuItem';
@@ -63,12 +62,6 @@ function RegisterEmployee({ name, _id, workHours, score, restaurantId, restauran
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Cadastro | Golden Food</title>
-      </Head>
-
-      <BackButton />
-
       <h2 className={FormsStyle.title}>
         {_id ? "Editar" : "Registrar"} Funcionário
       </h2>

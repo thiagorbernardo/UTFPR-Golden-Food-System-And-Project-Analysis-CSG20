@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
-import ErrorPage from "next/error";
 
 import { IFood } from "../../models/Food"
 import styles from '../../styles/BaseScreens.module.css'
@@ -10,7 +8,6 @@ import axios from "axios";
 import env from "../../config/Environment";
 import { IMenu } from "../../models";
 import { FoodCategories } from "../../enum";
-import { useEffect } from "react";
 
 type Props = {
   foods: IFood[],
@@ -48,10 +45,6 @@ function Menu({ foods, menu, restaurantId }: Props) {
 
   return (
     <main className={styles.main}>
-      <Head>
-        <title>Menu | Golden Food</title>
-      </Head>
-
       {StandardCard(`${menu ? "Editar" : "Registrar"} Cardápio`, `/menus/register?restaurantId=${restaurantId}`)}
       {foodsCategorization.map((food) => (
         card(food)

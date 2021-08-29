@@ -1,5 +1,4 @@
 import { GetServerSideProps } from "next"
-import Head from 'next/head'
 import ErrorPage from "next/error";
 import axios from "axios";
 import { useCallback } from "react";
@@ -21,10 +20,6 @@ function Blog({ restaurants }: Props) {
 
   return (
     <main className={styles.main} >
-      <Head>
-        <title>Restaurantes</title>
-      </Head>
-      <BackButton />
       {restaurants.map(({ _id, city, name }) => (
         <Card key={_id} _id={_id} city={city} name={name} />
       ))}

@@ -2,7 +2,6 @@
 import axios from "axios";
 import { GetServerSideProps } from "next"
 import ErrorPage from "next/error";
-import Head from "next/head";
 import React, { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
 import MenuItem from '@material-ui/core/MenuItem';
@@ -34,7 +33,7 @@ function RegisterOrder({ _id, cost, shipping, options, status, restaurantId, foo
   const router = useRouter()
 
   useEffect(() => {
-    const selectedFoods = foods.filter(value => selectedOptions.includes(value._id)).map(({name, price}) => ({name, price}))
+    const selectedFoods = foods.filter(value => selectedOptions.includes(value._id)).map(({ name, price }) => ({ name, price }))
     setOptions(selectedFoods)
 
     const totalPrice = selectedFoods.reduce((acc, curr) => acc + curr.price, 0)
@@ -76,12 +75,6 @@ function RegisterOrder({ _id, cost, shipping, options, status, restaurantId, foo
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Cadastro | Golden Food</title>
-      </Head>
-
-      <BackButton />
-
       <h2 className={FormsStyle.title}>
         {_id ? "Editar" : "Registrar"} Pedido
       </h2>
@@ -147,7 +140,7 @@ function RegisterOrder({ _id, cost, shipping, options, status, restaurantId, foo
           variant="contained"
           color="primary"
           onClick={handleSubmit}
-          disabled={!_id ? isFieldFilled(orderCost) || orderOptions.length === 0 || isFieldFilled(orderShipping): isFieldFilled(orderStatus)}>
+          disabled={!_id ? isFieldFilled(orderCost) || orderOptions.length === 0 || isFieldFilled(orderShipping) : isFieldFilled(orderStatus)}>
           {_id ? "Editar" : "Registrar"}
         </Button>
       </main>
