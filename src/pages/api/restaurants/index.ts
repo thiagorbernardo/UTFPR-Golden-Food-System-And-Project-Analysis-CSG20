@@ -24,7 +24,6 @@ export default async function handler(
         const sortedFoods = restaurantsService.sortRestaurantsByName(restaurants)
         return res.status(200).json(sortedFoods);
       case 'POST':
-
         const id = await restaurantsService.createRestaurant(name, city)
 
         return res.status(200).json({id})

@@ -30,7 +30,7 @@ function Order({ order }: Props) {
                     {`${order.status}`}
                 </h1>
                 {order.options.map(({ name, price }) => (
-                    <p className={styles.description}>
+                  <p key={`${name}${price}`} className={styles.description}>
                         {`${name} - R$ ${price}`}
                     </p>
                 ))}

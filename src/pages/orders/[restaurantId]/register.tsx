@@ -7,160 +7,181 @@ import React, { useCallback, useState } from "react";
 import { useRouter } from 'next/router'
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { IOrder } from "../../../models"
+import { IFood, IOrder } from "../../../models"
 import env from "../../../config/Environment";
 import styles from '../../../styles/Home.module.css'
 import FormsStyle from '../../../styles/Forms.module.css'
 import { BackButton } from "../../../components/BackButton";
 import { Button } from "@material-ui/core";
-import { TextInput } from "../../../components";
+import { TextInput, TextSelect } from "../../../components";
 import { OrderStatus } from "../../../enum";
+import { useEffect } from "react";
 
-function RegisterOrder({ _id, cost, shipping, options, status, restaurantId }: IOrder) {
-    const [orderOptions, setOptions] = useState(options || [])
-    const [orderShipping, setShipping] = useState(`${shipping}` || '')
-    const [orderCost, setCost] = useState(`${cost}` || '')
-    const [orderStatus, setStatus] = useState(status || '')
-    const router = useRouter()
-    const handleSubmit = async () => {
-        try {
-            if (_id) {
-                await axios.patch(`${env.app.url}/api/orders`, {
-                    _id,
-                    options: orderOptions,
-                    shipping: +orderShipping,
-                    cost: +orderCost,
-                    status: OrderStatus.delivered
-                })
+interface Props extends IOrder {
+  foods: IFood[]
+}
 
-                handleClickGoTo(`/orders/${restaurantId}/${_id}`)
-            }
-            else {
-                const res = await axios.post(`${env.app.url}/api/orders`, {
-                    options: orderOptions,
-                    shipping: +orderShipping,
-                    cost: +orderCost
-                })
-                handleClickGoTo(`/orders/${restaurantId}/${res.data.id}`)
-            }
-        } catch (error) {
-            console.log(error)
-            return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
-        }
+function RegisterOrder({ _id, cost, shipping, options, status, restaurantId, foods }: Props) {
+  const [orderOptions, setOptions] = useState(options || [])
+  const [selectedOptions, setSelected] = useState<string[]>([])
+  const [orderShipping, setShipping] = useState(shipping ? `${shipping}` : '')
+  const [orderCost, setCost] = useState(`${cost}` || '')
+  const [orderStatus, setStatus] = useState(status || '')
+  const router = useRouter()
 
+  useEffect(() => {
+    const selectedFoods = foods.filter(value => selectedOptions.includes(value._id)).map(({name, price}) => ({name, price}))
+    setOptions(selectedFoods)
+
+    const totalPrice = selectedFoods.reduce((acc, curr) => acc + curr.price, 0)
+    setCost(`${totalPrice + (+orderShipping || 0)}`)
+  }, [orderShipping, foods, selectedOptions])
+
+  const handleSubmit = async () => {
+    try {
+      if (_id) {
+        await axios.patch(`${env.app.url}/api/orders`, {
+          _id,
+          status: OrderStatus.delivered
+        })
+
+        handleClickGoTo(`/orders/${restaurantId}/${_id}`)
+      }
+      else {
+        const res = await axios.post(`${env.app.url}/api/orders?restaurantId=${restaurantId}`, {
+          options: orderOptions,
+          shipping: +orderShipping,
+          cost: +orderCost - +orderShipping,
+          restaurantId
+        })
+        handleClickGoTo(`/orders/${restaurantId}/${res.data.id}`)
+      }
+    } catch (error) {
+      console.log(error)
+      return <ErrorPage statusCode={404} title={"Essa informação não pode ser resgatada"} />;
     }
 
-    const isFieldFilled = (value: string) => value.length === 0
+  }
+
+  const isFieldFilled = (value: string) => value.length === 0
+
+  const handleClickGoTo = useCallback((route: string) => {
+    router.push(route)
+  }, [router])
 
 
-    const handleClickGoTo = useCallback((route: string) => {
-        router.push(route)
-    }, [router])
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Cadastro | Golden Food</title>
+      </Head>
 
-    return (
-        <div className={styles.container}>
-            <Head>
-                <title>Cadastro | Golden Food</title>
-            </Head>
+      <BackButton />
 
-            <BackButton />
+      <h2 className={FormsStyle.title}>
+        {_id ? "Editar" : "Registrar"} Pedido
+      </h2>
 
-            <h2 className={FormsStyle.title}>
-                {_id ? "Editar" : "Registrar"} Pedido
-            </h2>
-
-            <main className={styles.main}>
-
-                {/* <div className={FormsStyle.item}>
+      <main className={styles.main}>
+        {_id ? <div className={FormsStyle.item}>
           <TextInput
-            id="options"
-            value={orderOptions}
-            label="Pedido"
-            onChange={setOptions}
-            error={isFieldFilled(orderOptions)} />
-        </div> */}
+            id="status"
+            value={orderStatus}
+            label="Status"
+            onChange={setStatus}
+            error={isFieldFilled(orderStatus)}
+            select
+          >
+            {Object.values(OrderStatus).map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextInput>
+        </div> : <>
+          <div className={FormsStyle.item}>
+            <TextSelect
+              id="options"
+              value={selectedOptions}
+              label="Pedido"
+              onChange={setSelected}
+              error={selectedOptions.length === 0}
+            >
+              {foods.map((option) => (
+                <MenuItem key={option._id} value={option._id}>
+                  {`${option.name} - ${option.price}`}
+                </MenuItem>
+              ))}
+            </TextSelect>
+          </div>
+          <div className={FormsStyle.item}>
+            <TextInput
+              id="shipping"
+              value={orderShipping}
+              label="Frete"
+              onChange={setShipping}
+              error={isFieldFilled(orderShipping)}
+              type="number"
+            />
+          </div>
 
-                {_id ? <div className={FormsStyle.item}>
-                    <TextInput
-                        id="status"
-                        value={orderStatus}
-                        label="status"
-                        onChange={setStatus}
-                        error={isFieldFilled(orderStatus)}
-                        select
-                    >
-                        {Object.values(OrderStatus).map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </TextInput>
-                </div> : <></>
-                }
-                <div className={FormsStyle.item}>
-                    <TextInput
-                        id="shipping"
-                        value={orderShipping}
-                        label="Frete"
-                        onChange={setShipping}
-                        error={isFieldFilled(orderShipping)}
-                        type="number"
-                    />
-                </div>
+          <div className={FormsStyle.item}>
+            <TextInput
+              id="cost"
+              value={orderCost}
+              label="Total"
+              onChange={setCost}
+              error={isFieldFilled(orderCost)}
+              type="number"
+              disabled
+            />
+          </div>
+        </>
+        }
 
-                <div className={FormsStyle.item}>
-                    <TextInput
-                        id="cost"
-                        value={orderCost}
-                        label="Total"
-                        onChange={setCost}
-                        error={isFieldFilled(orderCost)}
-                        type="number"
-                    />
-                </div>
-
-                {/* <div className={FormsStyle.item}>
-          <TextInput
-            id="ingredients"
-            value={foodIngredients}
-            label="Ingredientes separados por ,"
-            onChange={(value: string) => setIngredients(value.split(","))}
-            error={foodIngredients.length === 0}
-          />
-        </div> */}
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={isFieldFilled(orderCost) /*|| foodIngredients.length === 0*/ || isFieldFilled(orderShipping)}>
-                    {_id ? "Editar" : "Registrar"}
-                </Button>
-            </main>
-        </div>
-    )
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          disabled={!_id ? isFieldFilled(orderCost) || orderOptions.length === 0 || isFieldFilled(orderShipping): isFieldFilled(orderStatus)}>
+          {_id ? "Editar" : "Registrar"}
+        </Button>
+      </main>
+    </div>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-    const { orderId } = context.query
+  const { orderId, restaurantId } = context.query
 
-    try {
-        const res = await axios.get<IOrder>(`${env.app.url}/api/orders/${orderId}`)
+  try {
+    const res = await axios.get<IOrder>(`${env.app.url}/api/orders/${orderId}`)
 
-        const order = res.data
+    const order = res.data
 
-        return {
-            props: {
-                ...order
-            },
-        }
-    } catch (error) {
-        return {
-            props: {
-            },
-        }
+    const props = { ...order, foods: [] }
+
+    if (!orderId) {
+      const resMenu = await axios.get(`${env.app.url}/api/menu/?restaurantId=${restaurantId}`)
+
+      const menu = resMenu.data
+      props.foods = menu.foods
     }
+
+    return {
+      props: {
+        ...props,
+        restaurantId
+      },
+    }
+  } catch (error) {
+    return {
+      props: {
+        foods: []
+      },
+    }
+  }
 
 }
 

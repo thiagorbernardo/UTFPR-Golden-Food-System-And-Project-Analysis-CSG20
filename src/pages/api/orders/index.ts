@@ -26,13 +26,11 @@ export default async function handler(
 
         return res.status(200).json(orders);
       case 'POST':
-
         const id = await ordersService.createOrder(restaurantId as string, +shipping, +cost, options as unknown as ExcludeFood[])
 
         return res.status(200).json({id})
       case 'PATCH':
-        console.log(_id, shipping, cost, options)
-        await ordersService.updateOrderById(_id as string, {shipping: +shipping, cost: +cost, options: options as unknown as ExcludeFood[]})
+        await ordersService.updateOrderById(_id as string, {status})
 
         return res.status(200).end()
       default:

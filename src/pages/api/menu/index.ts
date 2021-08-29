@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { Food } from '../../../models';
 import dbConnect from '../../../server/mongo'
 import { MenuService } from '../../../service';
 
@@ -16,11 +17,11 @@ export default async function handler(
   try {
     switch (req.method) {
       case 'GET':
-
         const menu = await menuService.getMenuByRestaurantId(restaurantId as string);
-        
-        return res.status(200).json(menu);
+        let foods: Food[] = []
+        if (menu) foods = await menuService.getFoodsFromMenu(menu)
 
+        return res.status(200).json({ menu, foods });
       case 'POST':
         const id = await menuService.createMenu(restaurantId as string, dessert, drinks, general, mainCourse, unavailableFoods)
 

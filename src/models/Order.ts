@@ -54,7 +54,7 @@ const PartialFoodSchema: Schema = new Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
 }, {
-  timestamps: true,
+  timestamps: false,
   _id: false
 });
 
