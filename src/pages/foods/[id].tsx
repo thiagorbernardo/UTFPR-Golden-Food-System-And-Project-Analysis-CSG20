@@ -24,7 +24,9 @@ function Food({ food }: Props) {
   }, [router])
 
   const totalOfIngredients = food.ingredients.length
-  const getIngredients = () => food.ingredients.slice(0, totalOfIngredients - 1).join(', ') + ' e ' + food.ingredients[totalOfIngredients - 1]
+  const getIngredients = () => (totalOfIngredients > 1 ? 
+    food.ingredients.slice(0, totalOfIngredients - 1).join(', ') + ' e ' + food.ingredients[totalOfIngredients - 1] :
+    food.ingredients[0])
 
   return (
     <div className={styles.container}>
