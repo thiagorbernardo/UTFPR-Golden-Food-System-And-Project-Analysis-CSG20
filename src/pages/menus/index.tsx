@@ -14,17 +14,18 @@ import { useEffect } from "react";
 
 type Props = {
   foods: IFood[],
-  menu: IMenu
+  menu: IMenu,
+  restaurantId: string
 }
 
 interface IFoodCategorized extends IFood {
   category: FoodCategories
 }
 
-function Blog({ foods, menu }: Props) {
-  if (!foods.length || !menu) {
-    return <ErrorPage statusCode={404} title={"Esse restaurante não possui menu"} />;
-  }
+function Menu({ foods, menu, restaurantId }: Props) {
+  // if (!foods.length || !menu) {
+  //   return <ErrorPage statusCode={404} title={"Esse restaurante não possui menu"} />;
+  // }
 
   let foodsCategorization = foods.map((food) => {
     let category
@@ -51,7 +52,7 @@ function Blog({ foods, menu }: Props) {
         <title>Menu | Golden Food</title>
       </Head>
 
-      {StandardCard(`${foods ? "Editar" : "Registrar"} Cardápio`, "/menus/register")}
+      {StandardCard(`${menu ? "Editar" : "Registrar"} Cardápio`, `/menus/register?restaurantId=${restaurantId}`)}
       {foodsCategorization.map((food) => (
         card(food)
       ))}
@@ -87,15 +88,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         ...res.data,
+        restaurantId
       },
     }
   } catch (error) {
     return {
       props: {
         foods: [],
+        restaurantId
       },
     }
   }
 }
 
-export default Blog
+export default Menu

@@ -18,6 +18,7 @@ export default async function handler(
     switch (req.method) {
       case 'GET':
         const menu = await menuService.getMenuByRestaurantId(restaurantId as string);
+
         let foods: Food[] = []
         if (menu) foods = await menuService.getFoodsFromMenu(menu)
 
