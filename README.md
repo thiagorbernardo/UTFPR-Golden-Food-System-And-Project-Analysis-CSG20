@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Como rodar
 
-## Getting Started
+1. Instalar o NodeJS -> https://nodejs.org/en/
+2. Instalar o yarn: `npm i -g yarn`
+3. Rodar o comando: `yarn`
+4. Após isso, `yarn dev`
+5. Acessar a url: http://localhost:3000/
 
-First, run the development server:
+## Estrutura de arquivos
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### Backend
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Está localizado na pasta /src/pages/api
+Todas as services (orientação a objeto) estão na pasta /src/services
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Frontend
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.tsx`.
+Todas as pastas dentro de /src/pages exceto pelo backend
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+## AVISO: Primeira vez ao rodar ele demora, pois utilizamos uma tecnologia de renderização estática, então antes de entrar na tela todo o conteúdo está sendo buscado no backend.
 
-To learn more about Next.js, take a look at the following resources:
+Imagens do banco de dados:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![food table](/docs/food-table.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![employee table](/docs/employee-table.png)
 
-## Deploy on Vercel
+![order table](/docs/order-table.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![menu table](/docs/menu-table.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![restaurant table](/docs/restaurant-table.png)
